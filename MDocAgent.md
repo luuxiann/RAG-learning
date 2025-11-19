@@ -118,6 +118,9 @@ and Other LVLMs.
 
 ## 复现
 ```
+conda deactivate    # 退出当前环境
+```
+```
 git clone git@github.com:aiming-lab/MDocAgent.git
 cd MDocAgent
 conda create -n mdocagent python=3.12
@@ -132,5 +135,8 @@ curl -X GET \                       # 下载数据集
 git clone git@hf.co:datasets/Lillianwei/Mdocagent-dataset
 好吧这样下的数据集有问题，还是得重新下
 
-换了个代理，hugging face可以注册了    # 2025.11.17
+# 换了个代理，hugging face可以注册了     2025.11.17
+# 用huggingface-cli也不行，在服务器上用git也不行，直接先git clone到电脑上，再传到服务器上
+ git clone https://huggingface.co/datasets/Lillianwei/Mdocagent-dataset
+python scripts/extract.py --config-name feta                            # 发现只有FetaTab数据集，先运行这个
 ```
