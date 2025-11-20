@@ -150,6 +150,13 @@ python scripts/extract.py --config-name ptext                       # 出了一�
  python scripts/retrieve.py --config-name ptab
  python scripts/retrieve.py --config-name ptext
 
+# 先下载需要的模型，再运行上面的代码
+ # 克隆 ColPali 基础模型
+git clone https://huggingface.co/vidore/colpaligemma-3b-mix-448-base ./local_models/colpaligemma-3b-mix-448-base
+# 克隆 ColPali 适配器和处理器
+git clone https://huggingface.co/vidore/colpali ./local_models/colpali
+# 克隆 ColBERT 模型
+git clone https://huggingface.co/colbert-ir/colbertv2.0 ./local_models/colbertv2.0
 
 ```
 
@@ -165,7 +172,7 @@ python scripts/extract.py --config-name ptext                       # 出了一�
  检索过程本质是“将内容转为向量，建立索引，输入查询后做相似度搜索，返回最相关内容”
     主流程：
     1. 加载配置：确定是文本还是图片检索。
-    2. 动态加载检索类？
+    2. 动态加载检索类：通过配置文件指定检索类路径（如retrieval.text_retrieval.ColbertRetrieval），运行时动态加载类并初始化。
     3. 初始化数据集和检索模型：用 BaseDataset 加载样本数据
     4. 执行检索：调用检索模型的 find_top_k(dataset) 方法，对每个样本进行检索，找出 top_k 最相关的内容。
    
@@ -181,12 +188,39 @@ python scripts/extract.py --config-name ptext                       # 出了一�
     图像检索：
     将图片转为向量，批量缓存，输入查询图片后做相似度搜索，返回最相关页面
    1.  准备阶段:用 ColPali 模型批量提取所有文档每页图片的特征（embedding）存入字典，并用 pickle 保存特征到本地。
-    2. 检索阶段:对每个样本，输入查询图片（如问题相关图片）。
-    用 ColPali 模型提取查询图片特征，与所有页面图片做相似度计算（用 CustomEvaluator）。
+    2. 检索阶段:对每个样本，输入查询文本（如问题相关图片）。
+    将查询文本编码为向量，与图像嵌入计算相似度（通过CustomEvaluator）。
     返回 top_k 最相关页面编号和分数。
     3. 结果保存:检索结果写入样本 json，供后续模型/Agent使用。
+4. Multi-Agent Inference：
+批量预测（predict_dataset方法）
+   1. 加载样本与断点续跑
+   从数据集加载样本，从resume_path加载已处理样本，跳过已生成答案的样本。
+   可选截断样本数量（truncate_len），用于快速测试。
+   2. 单样本预测
+   对每个样本执行：
+       1. 提取输入数据：通过dataset.load_sample_retrieval_data(sample)获取样本的question（问题）、texts（相关文本列表）、images（相关图像路径列表）。
+       2. 通用代理处理：
+       接收question、texts、images，生成初步回答（general_response）。
+       通过self_reflect方法和critical_prompt生成结构化关键点（critical_info），包含text（文本关键点）和image（图像关键点）。
+      1. 文本 / 图像代理细化：
+      文本代理接收question+ 文本关键点，仅基于texts生成细化回答（text_response）。
+      图像代理接收question+ 图像关键点，仅基于images生成细化回答（image_response）。
+       2. 汇总代理生成最终答案：汇总代理整合所有代理的输出（all_messages），生成结构化最终答案（{"Answer": "..."}）。
+   3. 结果保存与内存管理
+   每处理save_freq个样本，保存一次中间结果到result_dir（路径含时间戳，如2024-05-20-15-30.json）。
+   处理完一个样本后，清理代理对话历史（clean_messages）并释放 GPU 内存（torch.cuda.empty_cache()），避免内存累积。
+   4. 最终输出
+   所有样本处理完成后，最终结果保存为 JSON 文件，包含每个样本的预测答案（ans_key字段）和可选的对话历史（ans_key+"_message"字段）。
+   若启用评估（通过Agent.eval_dataset），会生成包含二进制正确率（binary_correctness）的评估报告。
+image_agent 、 general_agent 和 sum_agent使用 qwen2vl 模型
+text_agent 使用 llama31 模型
+eval_agent 使用 openai 
 
-
-
+## 一些需补充的知识
+1. pymupdf（pdf解析技术）
+2. ColBERT 模型：ColBERT（Contextualized Late Interaction over BERT）是一种基于 BERT 的高效文本检索模型，通过上下文感知的后期交互计算查询与文档的相似度，在保持高精度的同时大幅提升检索速度。它将查询和文档编码为向量，通过向量匹配实现快速检索。
+3. ColPali 模型：ColPali 是基于 PaLI-Gemma 的跨模态检索模型，支持文本查询与图像文档的匹配（如图像中的文字、布局等信息），适用于无法提取文本的图像类文档（如扫描件、截图）。
+4. 
 
 
