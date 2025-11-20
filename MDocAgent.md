@@ -139,4 +139,54 @@ git clone git@hf.co:datasets/Lillianwei/Mdocagent-dataset
 # 用huggingface-cli也不行，在服务器上用git也不行，直接先git clone到电脑上，再传到服务器上
  git clone https://huggingface.co/datasets/Lillianwei/Mdocagent-dataset
 python scripts/extract.py --config-name feta                            # 发现只有FetaTab数据集，先运行这个
+python scripts/extract.py --config-name mmlb                        # 重新下了一下数据集，总算齐了
+python scripts/extract.py --config-name ldu 
+python scripts/extract.py --config-name ptab 
+python scripts/extract.py --config-name ptext                       # 出了一点小问题，部分pdf出现损坏好像？不知道这样影不影响，直接继续了
+ 
+ python scripts/retrieve.py --config-name mmlb              # 这里出现了一点报错，可以看2025-11-19.md的学习日志里的记录
+ python scripts/retrieve.py --config-name feta
+ python scripts/retrieve.py --config-name ldu
+ python scripts/retrieve.py --config-name ptab
+ python scripts/retrieve.py --config-name ptext
+
+
 ```
+
+
+
+
+## 分析代码时的一些笔记
+1. MDocAgent输入处理的主要是pdf文档，
+2. 一开始extract用pymupdf（pdf解析技术）先提取pdf中每页的文本，然后将pdf渲染保存为图片。
+ **（说是用了OCR技术和pdf解析技术结合，但代码似乎只看到了pdf解析技术的使用？）**
+ （json）描述每个文档、每页内容、问题
+3. 然后 retrieval 分别检索文字和图片信息。
+ 检索过程本质是“将内容转为向量，建立索引，输入查询后做相似度搜索，返回最相关内容”
+    主流程：
+    1. 加载配置：确定是文本还是图片检索。
+    2. 动态加载检索类？
+    3. 初始化数据集和检索模型：用 BaseDataset 加载样本数据
+    4. 执行检索：调用检索模型的 find_top_k(dataset) 方法，对每个样本进行检索，找出 top_k 最相关的内容。
+   
+    文本检索：（基于 ColBERT（语义检索模型）的文本检索）
+    用 ColBERT 模型将页面文本转为向量，建立索引，然后用问题做查询，返回最相关页面
+    1. 准备阶段：用 RAGPretrainedModel 加载 ColBERT 检索模型。
+    遍历所有样本，把每页文本转为向量，建立索引（index）。
+    2. 检索阶段:对每个样本，输入查询（如问题文本）。
+    用 ColBERT 检索模型在索引中搜索，返回 top_k 最相关的页面编号和分数。（用样本里的问题作为查询，检索所有页面，得到相关性分数。）
+    支持过滤，只在指定页面范围内检索。
+    3. 结果保存:检索结果（相关页面编号和分数）写入样本 json，供后续模型/Agent使用。
+    
+    图像检索：
+    将图片转为向量，批量缓存，输入查询图片后做相似度搜索，返回最相关页面
+   1.  准备阶段:用 ColPali 模型批量提取所有文档每页图片的特征（embedding）存入字典，并用 pickle 保存特征到本地。
+    2. 检索阶段:对每个样本，输入查询图片（如问题相关图片）。
+    用 ColPali 模型提取查询图片特征，与所有页面图片做相似度计算（用 CustomEvaluator）。
+    返回 top_k 最相关页面编号和分数。
+    3. 结果保存:检索结果写入样本 json，供后续模型/Agent使用。
+
+
+
+
+
