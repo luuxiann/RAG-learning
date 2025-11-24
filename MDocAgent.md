@@ -149,6 +149,8 @@ python scripts/extract.py --config-name ptext                       # 出了一�
  python scripts/retrieve.py --config-name ldu
  python scripts/retrieve.py --config-name ptab
  python scripts/retrieve.py --config-name ptext
+ python scripts/retrieve.py --config-name mmlb 
+
 
 # 先下载需要的模型，再运行上面的代码
  # 克隆 ColPali 基础模型
