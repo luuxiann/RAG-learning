@@ -160,6 +160,11 @@ git clone https://huggingface.co/vidore/colpali ./local_models/colpali
 # 克隆 ColBERT 模型
 git clone https://huggingface.co/colbert-ir/colbertv2.0 ./local_models/colbertv2.0
 
+python scripts/predict.py --config-name feta run-name=feta-runs
+python scripts/predict.py --config-name ldu run-name=ldu-runs
+python scripts/predict.py --config-name ptab run-name=ptab-runs
+python scripts/predict.py --config-name ptext run-name=ptext-runs
+python scripts/predict.py --config-name mmlb run-name=mmlb-runs
 ```
 
 
