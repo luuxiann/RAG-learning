@@ -234,6 +234,6 @@ eval_agent 使用 openai
 1. pymupdf（pdf解析技术）
 2. ColBERT 模型：ColBERT（Contextualized Late Interaction over BERT）是一种基于 BERT 的高效文本检索模型，通过上下文感知的后期交互计算查询与文档的相似度，在保持高精度的同时大幅提升检索速度。它将查询和文档编码为向量，通过向量匹配实现快速检索。
 3. ColPali 模型：ColPali 是基于 PaLI-Gemma 的跨模态检索模型，支持文本查询与图像文档的匹配（如图像中的文字、布局等信息），适用于无法提取文本的图像类文档（如扫描件、截图）。
-4. 
+
 
 

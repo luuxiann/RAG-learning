@@ -1,5 +1,6 @@
 # MonkeyOCR v1.5 Technical Report: Unlocking Robust Document Parsing for Complex Patterns
 ## MonkeyOCR v1.5技术报告：解锁复杂模式的稳健文档解析
+https://github.com/Yuliang-Liu/MonkeyOCR
 ## Introduction
 1. 文档解析支撑着信息提取、检索增强生成和智能文档分析等下游应用，其将扫描图像、PDF文档等各类文档中包含的文本、表格、图像、公式等复杂多模态内容，系统化转化为结构化表示。
 2. 具有高度复杂版式和精细表格结构的文档图像难以解析，如表格可能包含多级嵌套、跨页延伸、合并或拆分单元格，以及图像、公式、混合字体等嵌入元素。

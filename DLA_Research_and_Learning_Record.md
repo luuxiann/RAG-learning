@@ -35,6 +35,14 @@
 5. (2024-07-30)文档解析的技术路线以及痛点 。https://zhuanlan.zhihu.com/p/711144228
  ![pictures](./pictures/1.jpg) 
  痛点：版式，表格，公式，阅读顺序。
+
+ ## 2025-11-27
+1. (2025-09-10)TextIn vs. DeepDoc性能测评：RAGFlow解析 https://www.xiaohongshu.com/explore/68c0e9dd000000001c0064a2?app_platform=android&ignoreEngage=true&app_version=9.10.0&share_from_user_hidden=true&xsec_source=app_share&type=normal&xsec_token=CBjdwsbnd93id0KdFIZaxP_znKO1YjOwxc4WnhiqzTqDI=&author_share=1&xhsshare=WeixinSession&shareRedId=ODhGODU4STo2NzUyOTgwNjY2OTpHODc-&apptime=1764207422&share_id=9da8a66cf3294f0396c65368e053752f&share_channel=wechat
+（似乎不开源，遂放弃）
+
+2.（2025-10-02）MinerU2.5源码拆解：双后端架构设计与企业 https://www.xiaohongshu.com/explore/68de97f10000000004007e89?app_platform=android&ignoreEngage=true&app_version=9.10.0&share_from_user_hidden=true&xsec_source=app_share&type=normal&xsec_token=CB3DPycnL3Hnnu_OYHeg9I7XAYv5tEIoW4Sz9VXGf4a4c=&author_share=1&xhsshare=WeixinSession&shareRedId=ODhGODU4STo2NzUyOTgwNjY2OTpHODc-&apptime=1764207507&share_id=090b14d5a6984c828857d640314d6e89&share_channel=wechat
+（感觉两阶段分析有点成为趋势？看的几个比较新的开源模型都是先解析文档结构再根据分类结果解析具体内容两个阶段。）
+3. (2025-11-05)开源OCR模型对比分析报告【基于多模态大模型】https://zhuanlan.zhihu.com/p/1969342407054197277
 ## 调研
 1. MonkeyOCR v1.5 
     1. 对文字、公式和表格的识别精确度还可以，但无法识别合并跨页内容。
@@ -42,4 +50,15 @@
     3. 嵌套表格不涉及跨页还能识别，跨页了识别就会出错。
     4. 运行速度较快，解析一个几十页的文档仅需几分钟。
     5. 只能处理pdf或图片，输出为markdown和JSON
-2.  
+2.  MinerU2.5 目前来说比FluxOCR和MonkeyOCR v1.5的效果更好
+    1. 支持处理三页跨页文档
+
+3. Qwen2.5-VL
+https://github.com/jzh15/Qwen2.5-VL
+
+4. FluxOCR
+    1.  在提取文字、表格内容上的准确性很高，不论是分栏还是跨页，还有页面边竖着的文字都能较好地处理识别。
+    2.  不过在跨栏且中间有图片解释干扰时识别就会出现一点问题。
+    3.  跨页表格
+
+
