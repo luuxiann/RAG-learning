@@ -27,5 +27,5 @@ pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https
 pip install -e .
 # CUDA 12.6
 pip install lmdeploy==0.9.2
-
+pip install accelerate
 ```

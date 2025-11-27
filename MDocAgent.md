@@ -165,9 +165,15 @@ python scripts/predict.py --config-name ldu run-name=ldu-runs
 python scripts/predict.py --config-name ptab run-name=ptab-runs
 python scripts/predict.py --config-name ptext run-name=ptext-runs
 python scripts/predict.py --config-name mmlb run-name=mmlb-runs
+# 缺少Llama3.1-8B-Instruct，可以去Llama官网下载申请，申请随便填一下就过了，比hugging face上申请好过
+# 好吧，这样下的不能用，与transform不兼容，只能用hugging face上下载的，不过hugging face我重新申请不了了，国家估计还是得填国外的
+
+python scripts/eval.py --config-name feta run-name=feta-runs
+python scripts/eval.py --config-name ldu run-name=ldu-runs
+python scripts/eval.py --config-name ptab run-name=ptab-runs
+python scripts/eval.py --config-name ptext run-name=ptext-runs
+# predict和eval的模型都不好搞，都给换成qwen2vl了
 ```
-
-
 
 
 ## 分析代码时的一些笔记
