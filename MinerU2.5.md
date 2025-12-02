@@ -1,6 +1,7 @@
 # MinerU
 https://github.com/opendatalab/MinerU
 ```
+conda deactivate
 git clone https://github.com/opendatalab/MinerU.git
 cd MinerU
 conda create -n mineru python=3.12

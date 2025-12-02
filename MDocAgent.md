@@ -173,6 +173,16 @@ python scripts/eval.py --config-name ldu run-name=ldu-runs
 python scripts/eval.py --config-name ptab run-name=ptab-runs
 python scripts/eval.py --config-name ptext run-name=ptext-runs
 # predict和eval的模型都不好搞，都给换成qwen2vl了
+
+python scripts/predict.py --config-name feta run-name=feta-runs4 dataset.top_k=4
+python scripts/predict.py --config-name ldu run-name=ldu-runs4 dataset.top_k=4
+python scripts/predict.py --config-name ptab run-name=ptab-runs4 dataset.top_k=4
+python scripts/predict.py --config-name ptext run-name=ptext-runs4 dataset.top_k=4
+python scripts/eval.py --config-name feta run-name=feta-runs4
+python scripts/eval.py --config-name ldu run-name=ldu-runs4
+python scripts/eval.py --config-name ptab run-name=ptab-runs4
+python scripts/eval.py --config-name ptext run-name=ptext-runs4
+
 ```
 
 

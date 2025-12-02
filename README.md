@@ -2,3 +2,4 @@
 week文件夹为每周学习情况，可能不一定更新，一些笔记可能直接更新在根目录下的md文档里（具体哪个看我当天学啥）
 对应学的模型会更新在对应文件。
 一些杂七杂八的学习资料和调研放在DLA_Research_and_Learning_Record.md里。
+（2025-12-02）现在新的学习情况都放在DLA_Research_and_Learning_Record.md里，week文件夹暂时不进行更新。
