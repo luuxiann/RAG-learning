@@ -51,8 +51,24 @@ NLP技术（Natuarl Language Processing）：自然语言处理，计算机如�
 Token:词元”，它是语言类模型中用数字来表示单词的最小语义单位。
 4. （2022-09-25）什么是token？https://blog.csdn.net/sunyctf/article/details/126509232
 作为计算机术语时，是“令牌”的意思。Token是服务端生成的一串字符串，以作客户端进行请求的一个令牌，当第一次登录后，服务器生成一个Token便将此Token返回给客户端，以后客户端只需带上这个Token前来请求数据即可，无需再次带上用户名和密码。token其实说的更通俗点可以叫暗号。
-5. （）一文搞懂prompt
+5. （2023-10-09）一文搞懂prompt https://zhuanlan.zhihu.com/p/652632988
+在人工智能（AI）领域中，"prompt" 是指向模型提供输入以引导其生成特定输出的文本或指令。它是与模型进行交互时用户提供的文本段落，用于描述用户想要从模型获取的信息、回答、文本等内容。Prompt 的目的是引导模型产生所需的回应，以便更好地控制生成的输出。
+6. 什么是 URL？https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_URL
+ 统一资源定位符（URL），是因特网中的唯一资源的地址。它是浏览器用于检索已发布资源（例如 HTML 页面、CSS 文档、图像等）的关键机制之一。
+7. (2024-12-16)使用Python自动识别和合并PDF中的跨页表格https://blog.csdn.net/weixin_44733966/article/details/140347225
+ 跑了一下他的代码，跨页表格合并效果不是特别理想，识别表格应该还可以。
 
+### 2025-12-04
+1. (2020-03-27)理解python中的self，这一篇就够了 https://blog.csdn.net/luanfenlian0992/article/details/105146518
+self 就是指实例本身，self.name就是Student类的属性变量，是Student类所有。而 self.__ class __ 则指向类。
+在Python中
+    1. 实例的变量名如果以__开头，就变成了一个私有变量（private）
+    2. 变量名类似__ xxx __的，也就是以双下划线开头，并且以双下划线结尾的，是特殊变量，特殊变量是可以直接访问的，不是private变量，所以，不能用__name __、 __score __这样的变量名
+    3. 看到以一个下划线开头的实例变量名，比如_name，这样的实例变量外部是可以访问的，但是，按照约定俗成的规定，当你看到这样的变量时，意思就是，“虽然我可以被访问，但是，请把我视为私有变量，不要随意访问”。
+
+    self 在定义时不可以省略。当然，如果我们的定义和调用时均不传类实例是可以的，这就是类方法。
+2. Python 为初学者解释’self’变量 https://geek-docs.com/python/python-ask-answer/527_python_explaining_the_self_variable_to_a_beginner.html
+’self’变量允许我们在方法定义中访问对象的属性和其他方法。通过’self’，我们能够在类内部引用和操作对象的数据，以及在对象中引用自身的属性和方法。
 
 ## 调研
 1. MonkeyOCR v1.5 
