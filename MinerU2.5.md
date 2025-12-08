@@ -36,7 +36,7 @@ mineru -p /home/hsr/福大课题数据包/福大课题数据包/基于业务本�
 #### 4.1.1 pipeline
 ![minerU](./pictures/M8.png)
 ##### YOLO学习
-1. 相关概念：YOLO（You Only Look Once）是一组实时目标检测机器学习算法。目标检测是一种计算机视觉任务，它使用神经网络来定位和分类图像中的物体。卷积神经网络(CNN) 是任何 YOLO 模型的基础。
+1. 相关概念：YOLO（You Only Look Once）是一组实时目标检测机器学习算法。目标检测是一种计算机视觉任务，它使用神经网络来定位和分类图像中的物体。[卷积神经网络(CNN)](https://github.com/luuxiann/RAG-learning/blob/main/CNN.md) 是任何 YOLO 模型的基础。
 2. 
    
 
@@ -64,7 +64,7 @@ mineru -p /home/hsr/福大课题数据包/福大课题数据包/基于业务本�
 
 ### 参考学习链接
 1. （2025-01-18）   [ YOLO 详解：从 v1 到 v11 ](https://zhuanlan.zhihu.com/p/13491328897)
-2.  （2023-12-11）[ 【综述】一文读懂卷积神经网络(CNN) ](https://zhuanlan.zhihu.com/p/561991816)
+2.  
 
 ## 五、具体代码学习
 ### 5.2 Pipeline后端详细流程
