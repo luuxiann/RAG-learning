@@ -30,3 +30,6 @@ pip install -e .
 pip install lmdeploy==0.9.2
 pip install accelerate
 ```
+
+
+MonkeyOCR v1.5
