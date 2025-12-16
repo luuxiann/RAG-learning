@@ -55,10 +55,52 @@ YOLO作为一种单阶段目标检测器，能够在一次前向传播中完成�
     2. 挑战：
         1. 小目标检测：YOLO在检测小目标时存在不足，特别是在图像中目标较小且数量较多的情况下，YOLO的检测精度可能明显下降。这是由于YOLO的网格划分策略导致小目标的特征容易被忽略。
         2. 复杂场景中的性能：在复杂场景中，尤其是存在大量重叠目标或背景杂乱时，YOLO的检测性能可能下降。此时，误检和漏检的几率增加，影响整体检测效果。
-
+##### DocLayout-YOLO
+介绍：
+&nbsp;&nbsp;&nbsp;&nbsp;该模型也是上海人工智能实验室推出的。
+&nbsp;&nbsp;&nbsp;&nbsp;该模型首先由 Mesh-candidate BestFit 的算法合成了一个大规模、多样化的DocSynth-300K用以模型预训练。
+&nbsp;&nbsp;&nbsp;&nbsp;GL-CRM 全局到局部可控感受野模块的工作原理。CRM灵活地提取和整合具有多个尺度和粒度的特征，而GL架构具有从全局上下文（整页规模）到子块区域（中等规模）再到局部语义信息的层次感知过程。
+![minerU](./pictures/DocLayout-YOLO1.jpg)
+优点：
+1. 处理速度快：9.55 it/s（约每秒 9.55 页）
+2. 虽然速度不及YOLO10，但性能比YOLO10好；且在比其他模型性能更好或者差不多的情况下，速度远高于其他模型，综合性能最好。
+    ![minerU](./pictures/DocLayout-YOLO3.png)
+3. 表格识别较vllm还是准确的，有线表格在目前测试的数据集中没有出现识别遗漏的情况。
+4. 模块段落划分准确。
+问题：
+1. 会出现漏字情况，严重的会遗漏一小部分
+  ![minerU](./pictures/DocLayout-YOLO2.png)
+  ![minerU](./pictures/DocLayout-YOLO4.png)
+1. 有把正文内容识别成页码或页眉的情况
+  ![minerU](./pictures/DocLayout-YOLO1.png)
+1. 模块顺序错误，有一行文字被错误识别为表格
+  ![minerU](./pictures/DocLayout-YOLO5.png)
+1. 表格几乎不会遗漏（不过也不是没有，只是不会漏了那种大范围的表格），但偶尔会出现覆盖不全的情况，特别是不规范的表格，导致影响后续解析准确度。
+  ![minerU](./pictures/DocLayout-YOLO6.png)
+  ![minerU](./pictures/DocLayout-YOLO8.png)
+  ![minerU](./pictures/DocLayout-YOLO9.png)
+  这种嵌套或者复杂表格也无法全面覆盖
+  ![minerU](./pictures/DocLayout-YOLO12.png)
+1. 文字标题内容级别的识别上准确有点差。分级不太行。
+1. 这个识别错误，还是在页面中间。不过确实不算表格？那个签署日期识别（就一般放右下角的）成页眉页尾确实不太行。差不多是附件序号名字那行以及用以签名以及写日期的一部分会被识别标记为灰色。
+ ![minerU](./pictures/DocLayout-YOLO13.png)
 
 #### 4.1.2 VLM 端到端
+使用的是 Qwen2-VL 架构
 ![minerU](./pictures/M9.png)
+##### vllm布局识别
+优点：
+1. 除了表格，其他识别和覆盖准确度都很好。表格只要识别到了基本就能准确覆盖其所有有文字的部分。
+2. 模块段落划分准确。
+
+问题：
+1. 会出现表格错误识别为文本的情况，也会出现因为一行文本夹在两个表格中间而被识别为表格的情况。跨页导致只有一行的表格更会识别错误。还有只识别了一部分的。
+  ![minerU](./pictures/DocLayout-YOLO7.png)
+  ![minerU](./pictures/DocLayout-YOLO10.png)
+  ![minerU](./pictures/DocLayout-YOLO11.png)
+2. 分级也是很有问题
+3. 错误分类附件名，但正确分类了签名和日期
+  ![minerU](./pictures/DocLayout-YOLO14.png)
 
 #### 4.1.3 中间格式转换
 ##### 后处理阶段
@@ -82,7 +124,8 @@ YOLO作为一种单阶段目标检测器，能够在一次前向传播中完成�
 ### 参考学习链接
 1. （2025-01-18）   [ YOLO 详解：从 v1 到 v11 ](https://zhuanlan.zhihu.com/p/13491328897)
 2.  （2025-08-11）[一文搞懂YOLO系列目标检测！万字长文（附YOLOv8实操教程）](https://blog.csdn.net/HUANGXIN9898/article/details/150222920)
-3.  
+3.  （2024-10-24）[上海AI实验室推出DocLayout-YOLO: 速度精度绝佳的文档布局分析模型](https://zhuanlan.zhihu.com/p/3014140807)
+4.  
 
 ## 五、具体代码学习
 ### 5.2 Pipeline后端详细流程

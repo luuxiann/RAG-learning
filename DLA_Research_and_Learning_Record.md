@@ -70,6 +70,9 @@ self 就是指实例本身，self.name就是Student类的属性变量，是Stude
 2. Python 为初学者解释’self’变量 https://geek-docs.com/python/python-ask-answer/527_python_explaining_the_self_variable_to_a_beginner.html
 ’self’变量允许我们在方法定义中访问对象的属性和其他方法。通过’self’，我们能够在类内部引用和操作对象的数据，以及在对象中引用自身的属性和方法。
 
+### 2025-12-15
+1. （2025-05-28）[字节开源高精度文档解析大模型Dolphin：轻量高效，性能超GPT4.1、Mistral-OCR？](https://zhuanlan.zhihu.com/p/1911044519694143509)
+
 ## 调研
 1. MonkeyOCR v1.5 
     1. 对文字、公式和表格的识别精确度还可以，但无法识别合并跨页内容。
@@ -89,6 +92,26 @@ https://github.com/jzh15/Qwen2.5-VL
     1.  在提取文字、表格内容上的准确性很高，不论是分栏还是跨页，还有页面边竖着的文字都能较好地处理识别。
     2.  不过在跨栏且中间有图片解释干扰时识别就会出现一点问题。
     3.  跨页表格只能合并部分
-2. 
 
+1. Dolphin
+优点：
+   1. 表格识别标记上，以及对各元素的分类没有什么问题。
+   2. 
+问题：
+   1. 文本识别出现了错位还有遗漏的情况。
+   ![Dolphin](./pictures/Dolphin1.png)
+   ![Dolphin](./pictures/Dolphin2.png)
+   2. 处理文件速度偏慢，差不多10s/页。  单布局分析，差不多15s/页
+   3. 页码识别有时会错位
+    ![Dolphin](./pictures/Dolphin3.png)
+    ![Dolphin](./pictures/Dolphin4.png)
+    ![Dolphin](./pictures/Dolphin5.png)
 
+1. Logics-Parsing 
+阿里的，处理速度和MinerU差不多，效果整体看起来并不比MinerU2.5好，文章写的也是比MinerU2好
+https://github.com/alibaba/Logics-Parsing
+演示：https://www.modelscope.cn/studios/Alibaba-DT/Logics-Parsing/summary
+
+1. chandra 
+https://github.com/datalab-to/chandra
+演示：https://www.datalab.to/playground
