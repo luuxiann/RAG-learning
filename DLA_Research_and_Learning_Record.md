@@ -113,5 +113,20 @@ https://github.com/alibaba/Logics-Parsing
 演示：https://www.modelscope.cn/studios/Alibaba-DT/Logics-Parsing/summary
 
 1. chandra 
+演示的那个网页太具有欺骗性了，把解析后文件下载下来看，解析效果除了表格和MinerU的vlm差不多吧（详细的没对比，主要看布局识别）
+表格markdown输出直接用的markdown格式而非html，呈现效果一般
+不过算是目前标题分级里做的最好的了，几乎没有把正文误识别为标题。
 https://github.com/datalab-to/chandra
 演示：https://www.datalab.to/playground
+
+1. PaddleOCR-VL
+https://huggingface.co/PaddlePaddle/PaddleOCR-VL
+https://github.com/PaddlePaddle/PaddleOCR、
+演示：https://aistudio.baidu.com/paddleocr
+[再看两阶段多模态文档解析大模型-PaddleOCR-VL架构、数据、训练方法](https://zhuanlan.zhihu.com/p/1962581920517986232)
+其中的第一阶段布局解析所用工具：
+[PP-DocLayoutV2](https://www.paddleocr.ai/latest/version3.x/module_usage/layout_analysis.html)
+这个看演示...算了吧，还有表格输出不换行真的很长啊（叹气）。.....为什么会把正文里的一些数字识别成公式。
+同一个团队的，专门针对复杂文档的PP-StructureV3
+演示：https://www.modelscope.cn/studios/PaddlePaddle/PP-StructureV3_Online_Demo
+这个演示用不了好像....还是下代码吧
