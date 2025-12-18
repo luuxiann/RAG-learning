@@ -94,23 +94,39 @@ https://github.com/jzh15/Qwen2.5-VL
     3.  跨页表格只能合并部分
 
 1. Dolphin
-优点：
-   1. 表格识别标记上，以及对各元素的分类没有什么问题。
-   2. 
-问题：
-   1. 文本识别出现了错位还有遗漏的情况。
-   ![Dolphin](./pictures/Dolphin1.png)
-   ![Dolphin](./pictures/Dolphin2.png)
-   2. 处理文件速度偏慢，差不多10s/页。  单布局分析，差不多15s/页
-   3. 页码识别有时会错位
-    ![Dolphin](./pictures/Dolphin3.png)
-    ![Dolphin](./pictures/Dolphin4.png)
-    ![Dolphin](./pictures/Dolphin5.png)
+https://github.com/bytedance/dolphin 字节的
+技术原理：​"Analyze-then-Parse"两阶段范式​​
+   * 页面级布局分析：用Swin Transformer对输入的文档图像进行编码，提取视觉特征。基于解码器生成文档元素序列，每个元素包含其类别（如标题、表格、图表等）和坐标位置。这一阶段的目标是按照自然阅读顺序生成结构化的布局信息。
+   * 元素级内容解析：根据第一阶段生成的布局信息，从原始图像中裁剪出每个元素的局部视图。用特定的提示词（prompts），对每个元素进行并行内容解析。例如，表格用专门的提示词解析HTML格式，公式和文本段落共享提示词解析LaTeX格式。解码器根据裁剪后的元素图像和提示词，生成最终的解析内容。
+
+    优点：
+    1. 表格识别标记上，以及对各元素的分类没有什么问题。
+    问题：
+    2. 文本识别出现了错位还有遗漏的情况。
+    ![Dolphin](./pictures/Dolphin1.png)
+    ![Dolphin](./pictures/Dolphin2.png)
+    3. 处理文件速度偏慢，差不多10s/页。  单布局分析，差不多15s/页
+    4. 页码识别有时会错位
+        ![Dolphin](./pictures/Dolphin3.png)
+        ![Dolphin](./pictures/Dolphin4.png)
+        ![Dolphin](./pictures/Dolphin5.png)
+   
+    Fox-Page基准测试 https://github.com/ucaslcl/Fox
+    https://pan.baidu.com/share/init?surl=t746ULp6iU5bUraVrPlMSw&pwd=fox1
 
 1. Logics-Parsing 
-阿里的，处理速度和MinerU差不多，效果整体看起来并不比MinerU2.5好，文章写的也是比MinerU2好
-https://github.com/alibaba/Logics-Parsing
-演示：https://www.modelscope.cn/studios/Alibaba-DT/Logics-Parsing/summary
+阿里的，处理速度和MinerU差不多，效果整体看起来并不比MinerU2.5好，文章里写的也是比MinerU2好
+技术原理
+    * 基于 Qwen2.5-VL-7B：Logics-Parsing 以强大的 Qwen2.5-VL-7B 模型为基础，继承了其在视觉和语言处理方面的优势。
+    * 两阶段训练：第一阶段是监督微调，模型学习生成结构化的 HTML 输出；第二阶段是布局为中心的强化学习，通过文本准确性、布局定位和阅读顺序三个奖励组件优化模型。
+    强化学习优化：通过强化学习，模型能更好地理解文档的布局和内容的逻辑顺序，生成更准确的结构化输出。
+   *  结构化 HTML 输出：模型能将文档图像转换为结构化的 HTML 格式，保留文档的逻辑结构，每个内容块都有类别、边界框坐标和 OCR 文本标签。
+   * 高级内容识别：模型能准确识别复杂科学公式、化学结构和手写中文字符，将化学结构转换为标准的 SMILES 格式。
+   * 自动去除无关元素：模型能自动识别并过滤掉页眉、页脚等无关元素，专注于文档的核心内容。
+
+    https://github.com/alibaba/Logics-Parsing
+    演示：https://www.modelscope.cn/studios/Alibaba-DT/Logics-Parsing/summary
+    LogicsParsingBench 测试集：1,078 个真实的PDF页面，覆盖了论文、报纸、书籍、海报、简历、试卷等9大类、超过20个子类
 
 1. chandra 
 演示的那个网页太具有欺骗性了，把解析后文件下载下来看，解析效果除了表格和MinerU的vlm差不多吧（详细的没对比，主要看布局识别）
@@ -119,14 +135,49 @@ https://github.com/alibaba/Logics-Parsing
 https://github.com/datalab-to/chandra
 演示：https://www.datalab.to/playground
 
-1. PaddleOCR-VL
+1. Paddlex
 https://huggingface.co/PaddlePaddle/PaddleOCR-VL
-https://github.com/PaddlePaddle/PaddleOCR、
-演示：https://aistudio.baidu.com/paddleocr
-[再看两阶段多模态文档解析大模型-PaddleOCR-VL架构、数据、训练方法](https://zhuanlan.zhihu.com/p/1962581920517986232)
-其中的第一阶段布局解析所用工具：
-[PP-DocLayoutV2](https://www.paddleocr.ai/latest/version3.x/module_usage/layout_analysis.html)
+    1. [PaddleOCR-VL](https://github.com/PaddlePaddle/PaddleOCR)
+    两阶段方案，由layout+VLM组成:
+       * 阶段1：PP-DocLayoutV2，负责布局分析，定位语义区域并预测其阅读顺序。PP-DocLayoutV2结构式RT-DETR以及一个具有六个transformer层的轻量级指针网络，以准确预测布局元素的阅读顺序。
+       * 阶段2：PaddleOCR-VL-0.9B对文本、表格、公式和图表进行ocr format。模型结构类似LLaVA：
+         * 视觉编码器：使用NaViT结构，从keye-vl初始化，支持原生分辨率输入（任意分辨率的图像而不会失真，从而减少幻觉）。
+         * 连接器：随机初始化的2层MLP
+         * 解码器：ERNIE-4.5-0.3B，引入3D-RoPE进一步增强了位置表示
+
+        演示：https://aistudio.baidu.com/paddleocr
+        [再看两阶段多模态文档解析大模型-PaddleOCR-VL架构、数据、训练方法](https://zhuanlan.zhihu.com/p/1962581920517986232)
+        其中的第一阶段布局解析所用工具：
+    1.  [PP-DocLayoutV3](https://www.paddleocr.ai/main/version3.x/pipeline_usage/PP-StructureV3.html)
+https://zhuanlan.zhihu.com/p/1887627016414664307
 这个看演示...算了吧，还有表格输出不换行真的很长啊（叹气）。.....为什么会把正文里的一些数字识别成公式。
 同一个团队的，专门针对复杂文档的PP-StructureV3
 演示：https://www.modelscope.cn/studios/PaddlePaddle/PP-StructureV3_Online_Demo
 这个演示用不了好像....还是下代码吧
+处理速度 5s/页。效果上小问题比较多:
+          1. 表格识别上，定位分类没问题，未出现右下角日期签名分类错误情况，但是覆盖和具体内容识别会出问题。
+          2. 标题分级上的效果不理想，依旧有出现把正文内容识别为标题的情况
+          3. 文字识别会有缺漏的情况
+          4. 第四张图直接整个表格错乱了，不知是布局分析问题还是表格识别问题
+          5. 针对两栏的阅读顺序的编排上有些问题
+![PP-StructureV3](./pictures/pp%20v3%201.png)
+![PP-StructureV3](./pictures/pp%20v3%202.png)
+![PP-StructureV3](./pictures/pp%20v3%203.png)
+![PP-StructureV3](./pictures/pp%20v3%204.png)
+![PP-StructureV3](./pictures/pp%20v3%205.png)
+1. olmOCR
+主要用于简单布局的文档，在简单布局的PDF上的表现确实比市面上同参数模型要优秀一点。主要还是想看看其在表格上的效果，不过还是一般。
+处理速度：0.8s/页，少见的连横线都能给你识别还原出来。其实不看表格，分类识别效果还是不错的。没出现像minerU的vlm那样把左上角的附件介绍当作页眉的情况。
+不得不说，这个嵌套表格识别效果真好：
+![olmOCR](./pictures/olmOCR1.png)
+下一页就不太理想了：
+![olmOCR](./pictures/olmOCR2.png)
+技术原理
+   * 文档锚定（Document-anchoring）：基与提取 PDF 页面中的文本块和图像的位置信息，与原始文本结合，形成提示（prompt）。提示与页面的栅格化图像一起输入到视觉语言模型（VLM）中。帮助模型更好地理解文档的结构和布局，减少因图像模糊或布局复杂导致的提取错误。
+   * 微调的视觉语言模型（VLM）：基于 Qwen2-VL-7B-Instruct 的 7B 参数视觉语言模型。在包含 26 万页 PDF 的数据集上进行微调，适应文档处理任务。模型输出结构化的 JSON 数据，包含页面的元数据（如语言、方向、是否包含表格等）和自然阅读顺序的文本内容。
+   * 高效推理与成本优化：用 SGLang 和 vLLM 等高效推理框架，支持大规模并行处理。基于优化硬件利用和推理流程，olmOCR 的处理成本极低，每百万页仅需 190 美元，远低于其他商业解决方案。
+   * 鲁棒性增强：在遇到提取失败或重复生成时，自动重试并调整提示内容。自动检测页面方向并进行旋转校正，确保内容正确提取。
+    演示：https://olmocr.allenai.org/
+    数据集：olmOCR-mix-0225
+
+
