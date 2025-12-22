@@ -180,4 +180,7 @@ https://zhuanlan.zhihu.com/p/1887627016414664307
     演示：https://olmocr.allenai.org/
     数据集：olmOCR-mix-0225
 
+1. Uni-Parser
+https://mp.weixin.qq.com/s/ueQwVtlKKaDxWA60TmixWw
+前几天刚推出的，对其中基于组的布局检测实现方式感兴趣，效果未知，目前只看到论文。
 
