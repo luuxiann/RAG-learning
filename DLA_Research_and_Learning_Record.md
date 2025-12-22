@@ -75,6 +75,7 @@ self 就是指实例本身，self.name就是Student类的属性变量，是Stude
 
 ## 调研
 1. MonkeyOCR v1.5 
+ https://github.com/Yuliang-Liu/MonkeyOCR
     1. 对文字、公式和表格的识别精确度还可以，但无法识别合并跨页内容。
     2. 对部分标题属于几级标题的分析会出错。
     3. 嵌套表格不涉及跨页还能识别，跨页了识别就会出错。
@@ -184,3 +185,13 @@ https://zhuanlan.zhihu.com/p/1887627016414664307
 https://mp.weixin.qq.com/s/ueQwVtlKKaDxWA60TmixWw
 前几天刚推出的，对其中基于组的布局检测实现方式感兴趣，效果未知，目前只看到论文。
 
+1. dots.ocr
+https://github.com/rednote-hilab/dots.ocr?tab=readme-ov-file
+演示：https://dotsocr.xiaohongshu.com/
+优点：
+    1. 内容覆盖全面，分类除了表格都没出问题，分级效果好，整体除了表格都比minerU好
+    2. 处理速度还不错，差不多1s/页
+
+问题：
+    1. 表格识别分类同样有问题，比minerU的vlm效果还差
+    2. 嵌套表格跨页时都会把旁边的空单元格忽略了，但是在demo演示网页是有点，好有欺骗性。
