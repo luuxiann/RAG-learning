@@ -13,7 +13,7 @@ uv pip install -U "mineru[core]" -i https://mirrors.aliyun.com/pypi/simple
 python analyze.py   # config 路径记得修改，这个是师兄直接弄好的情况下的操作，其实也相当于调用了下面那条命令了，只是会根据config文件路径来自动填充命令
 mineru -p <input_path> -o <output_path>                         # 这个是自己复现的情况
 mineru -p /home/hsr/福大课题数据包/福大课题数据包/基于业务本体的智能文档解 析/带批注的采购需求或采购文件/泉州  -o /home/hsr/MinerU/output
- mineru -p /home/hsr/MinerU/input/1  -o /home/hsr/MinerU/output -b vlm-transformers
+ mineru -p /home/hsr/MinerU/input/1  -o /home/hsr/MinerU/output/6 -b vlm-transformers
  # 有个小问题，minerU的vlm用一次得加载一次模型，加载一次大概要6-7分钟
 ```
 
@@ -129,7 +129,7 @@ YOLO作为一种单阶段目标检测器，能够在一次前向传播中完成�
 1. （2025-01-18）   [ YOLO 详解：从 v1 到 v11 ](https://zhuanlan.zhihu.com/p/13491328897)
 2.  （2025-08-11）[一文搞懂YOLO系列目标检测！万字长文（附YOLOv8实操教程）](https://blog.csdn.net/HUANGXIN9898/article/details/150222920)
 3.  （2024-10-24）[上海AI实验室推出DocLayout-YOLO: 速度精度绝佳的文档布局分析模型](https://zhuanlan.zhihu.com/p/3014140807)
-4.  
+
 
 ## 五、具体代码学习
 ### 5.2 Pipeline后端详细流程
