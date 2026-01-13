@@ -216,9 +216,10 @@ https://github.com/rednote-hilab/dots.ocr?tab=readme-ov-file
 export CUDA_VISIBLE_DEVICES=0
 bash /home/hsr/MinerU/run_layout_comparison.sh
 ```
+```
 ┌─────────────────────────────────────────────────────────────┐
-   │                      输入PDF文档                              │
-   └───────────────────────────┬─────────────────────────────────┘
+│                      输入PDF文档                            │ 
+└───────────────────────────┬─────────────────────────────────┘
                                │
                                ▼
    ┌─────────────────────────────────────────────────────────────┐
@@ -275,3 +276,11 @@ bash /home/hsr/MinerU/run_layout_comparison.sh
    │                   输出MinerU标准格式                          │
    │  (middle.json, content_list.json, model.json, Markdown等)   │
    └─────────────────────────────────────────────────────────────┘
+```
+另一种融合策略
+```
+export CUDA_VISIBLE_DEVICES=1
+date "+%Y-%m-%d %H:%M:%S %Z%z"
+bash /home/hsr/MinerU/run_dolphin_only_expansion.sh
+date "+%Y-%m-%d %H:%M:%S %Z%z"
+```
