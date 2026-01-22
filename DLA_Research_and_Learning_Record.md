@@ -74,19 +74,41 @@ self 就是指实例本身，self.name就是Student类的属性变量，是Stude
 1. （2025-05-28）[字节开源高精度文档解析大模型Dolphin：轻量高效，性能超GPT4.1、Mistral-OCR？](https://zhuanlan.zhihu.com/p/1911044519694143509)
 
 ## 调研
-1. MonkeyOCR v1.5 
+测评效果的比对主要采用手头所有的经过挑选的有代表性的共44页6组文档，人工进行比对。
+1. MonkeyOCR
  https://github.com/Yuliang-Liu/MonkeyOCR
-    1. 对文字、公式和表格的识别精确度还可以，但无法识别合并跨页内容。
-    2. 对部分标题属于几级标题的分析会出错。
-    3. 嵌套表格不涉及跨页还能识别，跨页了识别就会出错。
-    4. 运行速度较快，解析一个几十页的文档仅需几分钟。
-    5. 只能处理pdf或图片，输出为markdown和JSON
-2.  MinerU2.5 目前来说比FluxOCR和MonkeyOCR v1.5的效果更好
+    1. MonkeyOCR
+        Demo：http://vlrlabmonkey.xyz:8891/
+        部分解析效果展示：
+    
+        | ![MonkeyOCR](./pictures/Mo01.png)|![MonkeyOCR](./pictures/Mo02.png)|
+        |--|--|
+        | ![MonkeyOCR](./pictures/Mo04.png)|![MonkeyOCR](./pictures/Mo03.png)|
+        | ![MonkeyOCR](./pictures/Mo05.png)|![MonkeyOCR](./pictures/Mo08.png)|
+        | ![MonkeyOCR](./pictures/Mo07.png)|![MonkeyOCR](./pictures/Mo06.png)|
+        
+        平均解析速度为3.2s/页
+        MonkeyOCR在用以测试的投标文件中表现较差，出现内容缺失，页眉表格错误分类，表格覆盖不全的情况，问题较多，除了解析速度并未发现其他比MinerU2.5的vlm解析效果好的地方，故不予采用。
+   1. MonkeyOCR v1.5
+        Demo:https://aiwrite.wps.cn/pdf/parse/web/
+        11月中旬出的，解析效果较MonkeyOCR有了很大提升，在页眉标题识别这一块的效果优于MinerU2.5和Dolphin v2。
+        部分解析效果展示：
+         | ![MonkeyOCR v1.5](./pictures/Mo3.png)|![MonkeyOCR v1.5](./pictures/Mo8.png)|
+        |--|--|
+        | ![MonkeyOCR v1.5](./pictures/Mo7.png)|![MonkeyOCR v1.5](./pictures/Mo2.png)|
+        | ![MonkeyOCR v1.5](./pictures/Mo4.png)|![MonkeyOCR v1.5](./pictures/Mo5.png)|
+        | ![MonkeyOCR v1.5](./pictures/Mo10.png)|![MonkeyOCR v1.5](./pictures/Mo11.png)|
+        | ![MonkeyOCR v1.5](./pictures/Mo9.png)|![MonkeyOCR v1.5](./pictures/Mo1.png)|
+        | ![MonkeyOCR v1.5](./pictures/Mo6.png)|
+
+        平均解析速度为3.1s/页
+        分类效果除表格外都没出问题，边界框覆盖很全面，整体效果比MinerU2.5的vlm还好，但表格分类还是不准确，不能进行跨页合并。
+1.  MinerU2.5 目前来说比FluxOCR和MonkeyOCR的效果更好
     1. 支持处理三页跨页文档
     2. 在表格识别上存在问题，对于复杂表格处理会出现问题，比如说上下两行单元格数量不同，生成的表格就会与原格式不同，不对齐。无法处理所有跨页表格的情况。
     3. 无法实现跨页文本合并。
 
-3. Qwen2.5-VL
+2. Qwen2.5-VL
 https://github.com/jzh15/Qwen2.5-VL
 
 1. FluxOCR
@@ -96,7 +118,7 @@ https://github.com/jzh15/Qwen2.5-VL
     2.  不过在跨栏且中间有图片解释干扰时识别就会出现一点问题。
     3.  跨页表格只能合并部分
 
-1. Dolphin
+2. Dolphin
 https://github.com/bytedance/dolphin 字节的
 技术原理：​"Analyze-then-Parse"两阶段范式​​
    * 页面级布局分析：用Swin Transformer对输入的文档图像进行编码，提取视觉特征。基于解码器生成文档元素序列，每个元素包含其类别（如标题、表格、图表等）和坐标位置。这一阶段的目标是按照自然阅读顺序生成结构化的布局信息。
@@ -129,7 +151,6 @@ https://github.com/bytedance/dolphin 字节的
 
     https://github.com/alibaba/Logics-Parsing
     演示：https://www.modelscope.cn/studios/Alibaba-DT/Logics-Parsing/summary
-    LogicsParsingBench 测试集：1,078 个真实的PDF页面，覆盖了论文、报纸、书籍、海报、简历、试卷等9大类、超过20个子类
 
 1. chandra 
 演示的那个网页太具有欺骗性了，把解析后文件下载下来看，解析效果除了表格和MinerU的vlm差不多吧（详细的没对比，主要看布局识别）
@@ -151,7 +172,7 @@ https://huggingface.co/PaddlePaddle/PaddleOCR-VL
         演示：https://aistudio.baidu.com/paddleocr
         [再看两阶段多模态文档解析大模型-PaddleOCR-VL架构、数据、训练方法](https://zhuanlan.zhihu.com/p/1962581920517986232)
         其中的第一阶段布局解析所用工具：
-    1.  [PP-DocLayoutV3](https://www.paddleocr.ai/main/version3.x/pipeline_usage/PP-StructureV3.html)
+    2.  [PP-DocLayoutV3](https://www.paddleocr.ai/main/version3.x/pipeline_usage/PP-StructureV3.html)
 https://zhuanlan.zhihu.com/p/1887627016414664307
 这个看演示...算了吧，还有表格输出不换行真的很长啊（叹气）。.....为什么会把正文里的一些数字识别成公式。
 同一个团队的，专门针对复杂文档的PP-StructureV3
